@@ -5,8 +5,10 @@ pipeline {
     stages {
         stage('build') {
             steps {
-                echo 'Hello World'
-                sh 'npm --version'
+                nodejs('Node12_Latest') {
+                    echo 'Hello World'
+                    sh 'npm --version'
+                }
             }
         }
     }
