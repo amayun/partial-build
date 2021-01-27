@@ -1,0 +1,4 @@
+.gitignore
+Jenkinsfile
+packages/first/index.txt
+packages/second/new.txt
