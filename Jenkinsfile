@@ -6,7 +6,7 @@ pipeline {
         stage('build') {
             steps {
                 nodejs('Node12_Latest') {
-                    echo 'Hello World 2'
+                    echo 'Hello World 3'
                     sh 'npm --version'
                 }
             }
