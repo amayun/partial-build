@@ -45,6 +45,17 @@ pipeline {
                 }
             }
         }
+
+        state('PostInit') {
+            steps {
+                script {
+                    for(def entry in currentBuild.changeSets) {
+                        echo "paths list ${entry.getAffectedFiles().toListString()}"
+                        //entry.getAffectedPaths()
+                    }
+                }
+            }
+        }
         stage('initial') {
             steps {
                 script {
