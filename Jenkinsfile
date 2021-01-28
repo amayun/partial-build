@@ -49,9 +49,7 @@ pipeline {
         stage('PostInit') {
             steps {
                 script {
-                    echo "changes ${currentBuild.changeSets.toString()}"
-                    //[[items: [entry]],]
-                    /*def changeLogSets = currentBuild.changeSets
+                    def changeLogSets = currentBuild.changeSets
                     for (int i = 0; i < changeLogSets.size(); i++) {
                         def entries = changeLogSets[i].items
                         for (int j = 0; j < entries.length; j++) {
@@ -63,7 +61,7 @@ pipeline {
                                 echo "  ${file.editType.name} ${file.path}"
                             }
                         }
-                    }*/
+                    }
                 }
             }
         }
