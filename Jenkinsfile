@@ -29,10 +29,12 @@ pipeline {
     stages {
         stage('initial') {
             steps {
-               echo 'Stage Initial'
-               echo ref $ref
-               echo before $before
-               echo after $after
+                script {
+                   sh "echo 'Stage Initial'"
+                   sh "echo $ref"
+                   sh "echo $before"
+                   sh "echo $after"
+                }
             }
         }
 
