@@ -46,7 +46,7 @@ pipeline {
             }
         }
 
-        state('PostInit') {
+        stage('PostInit') {
             steps {
                 script {
                     for(def entry in currentBuild.changeSets) {
