@@ -58,11 +58,13 @@ pipeline {
                             }
                         }
                     }
-                    echo "changedFiles: ${changedFiles.toString()}"
+                    echo "changedFiles: ${changedFiles}"
+                    def changedPackages = ps
+                        .findAll { it.startsWith('packages') }
+                        .collect { it.split('/')[1] }
+                        .unique()
 
-                    changedFiles = changedFiles.unique()
-
-                    echo "unique changedFiles: ${changedFiles.toString()}"
+                    echo "changedPackages: ${changedPackages}"
                 }
             }
         }
@@ -70,9 +72,6 @@ pipeline {
             steps {
                 script {
                    sh "echo 'Stage Initial'"
-                   /*sh "echo $ref"
-                   sh "echo $before"
-                   sh "echo $after"*/
                 }
             }
         }
