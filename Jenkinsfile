@@ -1,5 +1,7 @@
 #!/usr/bin/env groovy
 
+def APPS = []
+
 pipeline {
     agent any
 
@@ -27,6 +29,22 @@ pipeline {
     }
 
     stages {
+        stage('Init') {
+            steps {
+                script {
+                    VALUESFILE = sh(returnStdout: true, script:'git diff $before $after --name-only')
+                    LIST = VALUESFILE.split('\n')
+                    def MAP = [:]
+                    for(String file in LIST) {
+                        MAP.put(file.split('/')[0], "build");
+                    }
+                    APPS = MAP.keySet()
+
+                    echo "Changes in:${VALUESFILE}"
+                    echo "application to build:${APPS}"
+                }
+            }
+        }
         stage('initial') {
             steps {
                 script {
