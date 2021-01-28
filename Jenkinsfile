@@ -50,7 +50,8 @@ pipeline {
             steps {
                 script {
                     def changeLogSets = currentBuild.changeSets
-                    for (int i = 0; i < changeLogSets.size(); i++) {
+
+                    /*for (int i = 0; i < changeLogSets.size(); i++) {
                         def entries = changeLogSets[i].items
                         for (int j = 0; j < entries.length; j++) {
                             def entry = entries[j]
@@ -61,7 +62,18 @@ pipeline {
                                 echo "  ${file.editType.name} ${file.path}"
                             }
                         }
+                    }*/
+
+                    def changedFiles = []
+                    for (entries in changeLogSets) {
+                        for (entry in entries) {
+                            for (file in entry.affectedFiles) {
+                                echo "Found changed file: ${file.path}"
+                                changedFiles += "${file.path}"
+                            }
+                        }
                     }
+                    echo "changedFiles: ${changedFiles.toString()}"
                 }
             }
         }
