@@ -70,9 +70,9 @@ pipeline {
             steps {
                 script {
                    sh "echo 'Stage Initial'"
-                   sh "echo $ref"
+                   /*sh "echo $ref"
                    sh "echo $before"
-                   sh "echo $after"
+                   sh "echo $after"*/
                 }
             }
         }
