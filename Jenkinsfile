@@ -59,7 +59,7 @@ pipeline {
                         }
                     }
                     echo "changedFiles: ${changedFiles}"
-                    def changedPackages = ps
+                    def changedPackages = changedFiles
                         .findAll { it.startsWith('packages') }
                         .collect { it.split('/')[1] }
                         .unique()
