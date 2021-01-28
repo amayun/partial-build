@@ -54,12 +54,15 @@ pipeline {
                     for (entries in changeLogSets) {
                         for (entry in entries) {
                             for (file in entry.affectedFiles) {
-                                echo "Found changed file: ${file.path}"
                                 changedFiles += "${file.path}"
                             }
                         }
                     }
                     echo "changedFiles: ${changedFiles.toString()}"
+
+                    changedFiles = changedFiles.unique()
+
+                    echo "unique changedFiles: ${changedFiles.toString()}"
                 }
             }
         }
