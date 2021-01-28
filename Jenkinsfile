@@ -11,7 +11,7 @@ pipeline {
 
         stage('build first') {
             when {
-                changeset "/packages/first/**/*"
+                changeset "packages/first/**/*"
             }
             steps {
                 nodejs('Node14_Latest') {
@@ -23,7 +23,7 @@ pipeline {
 
         stage('build second') {
             when {
-                changeset "/packages/second/**/*"
+                changeset "packages/second/**/*"
             }
             steps {
                 nodejs('Node14_Latest') {
