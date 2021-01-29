@@ -89,9 +89,9 @@ pipeline {
             steps {
                 nodejs('Node14_Latest') {
                     script {
-                        env.APPS.indexOf('first') echo 'Build First'
-                        env.APPS.indexOf('second') echo 'Build Second'
-                        env.APPS.indexOf('third') echo 'Build Third'
+                        env.APPS.indexOf('first') sh "echo 'Build First'"
+                        env.APPS.indexOf('second') sh "echo 'Build Second'"
+                        env.APPS.indexOf('third') sh "echo 'Build Third'"
                     }
                 }
             }
