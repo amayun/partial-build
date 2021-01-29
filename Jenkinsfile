@@ -1,6 +1,5 @@
 #!/usr/bin/env groovy
 
-def APPS = []
 def DEPS = [first: ['second', 'third'], second: ['third']];
 
 pipeline {
@@ -65,44 +64,46 @@ pipeline {
                         .collect { it.split('/')[1] }
                         .unique()
 
-                    def changedPackagesWithDeps = changedPackages
+                    env.APPS = changedPackages
                         .collect { [it, DEPS[it]] }
                         .flatten()
                         .unique()
 
                     echo "changedPackages: ${changedPackages}"
-                    echo "changedPackagesWithDeps: ${changedPackagesWithDeps}"
+                    echo "APPS: ${env.APPS}"
                 }
             }
         }
         stage('initial') {
             steps {
-                script {
-                   sh "echo 'Stage Initial'"
+                nodejs('Node14_Latest') {
+                    script {
+                       sh "echo 'Stage Initial'"
+                       sh 'npm --version'
+                    }
                 }
             }
         }
 
-        stage('build first') {
-            when {
-                changeset "packages/first/**/*"
-            }
+        stage('build based on changed packages') {
             steps {
                 nodejs('Node14_Latest') {
-                    echo 'Stage Build First'
-                    sh 'npm --version'
+                    script {
+                        env.APPS.indexOf('first') echo 'Build First'
+                        env.APPS.indexOf('second') echo 'Build Second'
+                        env.APPS.indexOf('third') echo 'Build Third'
+                    }
                 }
             }
         }
 
-        stage('build second') {
+        stage('build based on single path') {
             when {
-                changeset "packages/second/**/*"
+                changeset "packages/fourth/**/*"
             }
             steps {
                 nodejs('Node14_Latest') {
-                    echo 'Stage Build Second'
-                    sh 'npm --version'
+                    echo 'Stage Build fourth'
                 }
             }
         }
