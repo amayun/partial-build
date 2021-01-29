@@ -90,15 +90,15 @@ pipeline {
             steps {
                 nodejs('Node14_Latest') {
                     script {
-                        if(APPS.indexOf('first') > 0) {
+                        if(APPS.contains('first')) {
                             echo 'Build First'
                         }
 
-                        if(APPS.indexOf('second') > 0) {
+                        if(APPS.contains('second')) {
                             echo 'Build Second'
                         }
 
-                        if(APPS.indexOf('third') > 0) {
+                        if(APPS.contains('third')) {
                             echo 'Build Third'
                         }
                     }
