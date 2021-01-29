@@ -72,6 +72,9 @@ pipeline {
 
                     echo "changedPackages: ${changedPackages}"
                     echo "APPS: ${APPS}"
+
+                    def prevBuildResult = currentBuild.getPreviousBuild().result
+                    echo "prevBuildResult ${prevBuildResult}"
                 }
             }
         }
