@@ -66,9 +66,9 @@ pipeline {
                         .unique()
 
                     def changedPackagesWithDeps = changedPackages
-                        .collect { DEPS[it] }
+                        .collect { [it, DEPS[it]] }
                         .flatten()
-                        .unique();
+                        .unique()
 
                     echo "changedPackages: ${changedPackages}"
                     echo "changedPackagesWithDeps: ${changedPackagesWithDeps}"
