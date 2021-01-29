@@ -1,7 +1,7 @@
 #!/usr/bin/env groovy
 
 def APPS = []
-def DEPS = [first: [second, third], second: [third]];
+def DEPS = [first: ['second', 'third'], second: ['third']];
 
 pipeline {
     agent any
