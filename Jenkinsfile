@@ -1,5 +1,6 @@
 #!/usr/bin/env groovy
 
+def ALL = ['first', 'second', 'third', 'fourth']
 def APPS = [];
 def DEPS = [first: ['second', 'third'], second: ['third']];
 
@@ -50,31 +51,37 @@ pipeline {
         stage('PostInit') {
             steps {
                 script {
-                    def changeLogSets = currentBuild.changeSets
-                    def changedFiles = []
-                    for (entries in changeLogSets) {
-                        for (entry in entries) {
-                            for (file in entry.affectedFiles) {
-                                changedFiles += "${file.path}"
+                    def prevBuildResult = currentBuild.getPreviousBuild().result
+
+                    if(prevBuildResult == 'SUCCESS') {
+                        def changeLogSets = currentBuild.changeSets
+                        def changedFiles = []
+                        for (entries in changeLogSets) {
+                            for (entry in entries) {
+                                for (file in entry.affectedFiles) {
+                                    changedFiles += "${file.path}"
+                                }
                             }
                         }
+
+                        echo "changedFiles: ${changedFiles}"
+
+                        def changedPackages = changedFiles
+                            .findAll { it.startsWith('packages') }
+                            .collect { it.split('/')[1] }
+                            .unique()
+
+                        APPS = changedPackages
+                            .collect { [it, DEPS[it]] }
+                            .flatten()
+                            .unique()
+
+                        echo "changedPackages: ${changedPackages}"
+                    } else {
+                        APPS = ALL
                     }
-                    echo "changedFiles: ${changedFiles}"
-                    def changedPackages = changedFiles
-                        .findAll { it.startsWith('packages') }
-                        .collect { it.split('/')[1] }
-                        .unique()
 
-                    APPS = changedPackages
-                        .collect { [it, DEPS[it]] }
-                        .flatten()
-                        .unique()
-
-                    echo "changedPackages: ${changedPackages}"
                     echo "APPS: ${APPS}"
-
-                    def prevBuildResult = currentBuild.getPreviousBuild().result
-                    echo "prevBuildResult ${prevBuildResult}"
                 }
             }
         }
