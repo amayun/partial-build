@@ -1,5 +1,6 @@
 #!/usr/bin/env groovy
 
+def APPS = [];
 def DEPS = [first: ['second', 'third'], second: ['third']];
 
 pipeline {
@@ -64,13 +65,13 @@ pipeline {
                         .collect { it.split('/')[1] }
                         .unique()
 
-                    env.APPS = changedPackages
+                    APPS = changedPackages
                         .collect { [it, DEPS[it]] }
                         .flatten()
                         .unique()
 
                     echo "changedPackages: ${changedPackages}"
-                    echo "APPS: ${env.APPS}"
+                    echo "APPS: ${APPS}"
                 }
             }
         }
@@ -89,9 +90,17 @@ pipeline {
             steps {
                 nodejs('Node14_Latest') {
                     script {
-                        env.APPS.indexOf('first') sh "echo 'Build First'"
-                        env.APPS.indexOf('second') sh "echo 'Build Second'"
-                        env.APPS.indexOf('third') sh "echo 'Build Third'"
+                        if(APPS.indexOf('first')) {
+                            echo 'Build First'
+                        }
+
+                        if(APPS.indexOf('second')) {
+                            echo 'Build Second'
+                        }
+
+                        if(APPS.indexOf('third')) {
+                            echo 'Build Third'
+                        }
                     }
                 }
             }
