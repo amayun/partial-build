@@ -1,6 +1,7 @@
 #!/usr/bin/env groovy
 
 def APPS = []
+def DEPS = [first: [second, third], second: [third]];
 
 pipeline {
     agent any
@@ -64,7 +65,13 @@ pipeline {
                         .collect { it.split('/')[1] }
                         .unique()
 
+                    def changedPackagesWithDeps = changedPackages
+                        .collect { DEPS[it] }
+                        .flatten()
+                        .unique();
+
                     echo "changedPackages: ${changedPackages}"
+                    echo "changedPackagesWithDeps: ${changedPackagesWithDeps}"
                 }
             }
         }
