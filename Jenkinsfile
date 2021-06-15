@@ -1,40 +1,6 @@
 #!/usr/bin/env groovy
 
-import groovy.json.JsonSlurper;
-
-def appsDir = '/apps/'
-def libsDir = '/libs/'
-
-def isRootFilesWereChanged () {
-    def changedFiles = []
-    for (entries in currentBuild.changeSets) {
-        for (entry in entries) {
-            for (file in entry.affectedFiles) {
-                changedFiles += "${file.path}"
-            }
-        }
-    }
-
-    return changedFiles.find { !it.contains(libsDir) && !it.contains(appsDir) }
-}
-
-def getAllPackages () {
-    return sh(script: "\"\$(npm bin)\"/lerna list --all --json", returnStdout: true)
-}
-
-def calculateChanges(appsOnly = false) {
-    def affected = sh(script: "\"\$(npm bin)\"/lerna list --all --json --since=${env.AFFECTED_BASE}", returnStdout: true)
-    def packagesJson = isRootFilesWereChanged() ? getAllPackages() : affected
-
-    def jsonSlurper = new JsonSlurper()
-    def packages = jsonSlurper.parseText(packagesJson)
-
-    if(appsOnly) {
-        packages.findAll{ it['location'].contains(appsDir) }.collect{ it['name'] }
-    }
-
-    return packages.collect{ it['name'] }
-}
+import groovy.json.JsonSlurper
 
 pipeline {
     agent any
@@ -210,4 +176,38 @@ pipeline {
             }
         }
     }
+}
+
+def appsDir = '/apps/'
+def libsDir = '/libs/'
+
+def isRootFilesWereChanged () {
+    def changedFiles = []
+    for (entries in currentBuild.changeSets) {
+        for (entry in entries) {
+            for (file in entry.affectedFiles) {
+                changedFiles += "${file.path}"
+            }
+        }
+    }
+
+    return changedFiles.find { !it.contains(libsDir) && !it.contains(appsDir) }
+}
+
+def getAllPackages () {
+    return sh(script: "\"\$(npm bin)\"/lerna list --all --json", returnStdout: true)
+}
+
+def calculateChanges(appsOnly = false) {
+    def affected = sh(script: "\"\$(npm bin)\"/lerna list --all --json --since=${env.AFFECTED_BASE}", returnStdout: true)
+    def packagesJson = isRootFilesWereChanged() ? getAllPackages() : affected
+
+    def jsonSlurper = new JsonSlurper()
+    def packages = jsonSlurper.parseText(packagesJson)
+
+    if(appsOnly) {
+        packages.findAll{ it['location'].contains(appsDir) }.collect{ it['name'] }
+    }
+
+    return packages.collect{ it['name'] }
 }
