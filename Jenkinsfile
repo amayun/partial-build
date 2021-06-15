@@ -51,6 +51,8 @@ pipeline {
         stage('PostInit') {
             steps {
                 script {
+                    sh 'env'
+
                     def prevBuildResult = currentBuild.getPreviousBuild().result
 
                     echo "getBuildCauses(): ${currentBuild.getBuildCauses()[0].hashCode()}"
