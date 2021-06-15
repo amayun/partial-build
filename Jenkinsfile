@@ -50,9 +50,12 @@ pipeline {
 
         stage('Init') {
             steps {
-                script {
-                    sh 'npm install'
-                    sh 'lerna list'
+                nodejs('Node14_Latest') {
+                    script {
+                        sh 'npm --version'
+                        sh 'npm install'
+                        sh 'lerna list'
+                    }
                 }
             }
         }
