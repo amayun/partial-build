@@ -55,7 +55,7 @@ pipeline {
                             env.CLUSTER = "dev"
                             env.AFFECTED_BASE = "origin/main"
                             break
-                        case ~/main/:
+                        case ~/master/:
                             env.NAMESPACE = "dev"
                             env.CLUSTER = "dev"
                             env.AFFECTED_BASE = env.GIT_PREVIOUS_COMMIT
@@ -82,6 +82,7 @@ pipeline {
                     script {
                         sh "npm --version"
                         sh "npm install"
+                        echo "since: ${env.AFFECTED_BASE}"
                         def chdAll = calculateChanges()
                         def chdApps = calculateChanges(true)
                         echo "changed all: ${chdAll}"
