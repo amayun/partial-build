@@ -55,7 +55,7 @@ pipeline {
                         sh "npm --version"
                         sh "npm bin"
                         sh "npm install"
-                        sh "\$(npm bin)/lerna list"
+                        sh "'\$(npm bin)'/lerna list"
                     }
                 }
             }
