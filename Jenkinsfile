@@ -51,30 +51,18 @@ pipeline {
                 script {
                     switch(env.GIT_BRANCH) {
                         case ~/PR.*/:
-                            env.NAMESPACE = "test"
-                            env.CLUSTER = "dev"
                             env.AFFECTED_BASE = "origin/master"
                             break
-                        case ~/master/:
-                            echo "MASTER"
-                            env.NAMESPACE = "dev"
-                            env.CLUSTER = "dev"
+                        case ~/(.*)master/:
                             env.AFFECTED_BASE = env.GIT_PREVIOUS_COMMIT
                             break
                         case ~/^[\d\.]+/:
-                            env.NAMESPACE = "stage"
-                            env.CLUSTER = "stage"
                             env.AFFECTED_BASE = ""
                             break
                         case ~/^[\d\.]+\-preprod/:
-                            env.NAMESPACE = "preprod"
-                            env.CLUSTER = "preprod"
                             env.AFFECTED_BASE = ""
                             break
                         default:
-                            echo "DEFAULT"
-                            env.NAMESPACE = "test"
-                            env.CLUSTER = "dev"
                             env.AFFECTED_BASE = ""
                             break
                     }
@@ -83,7 +71,6 @@ pipeline {
                 nodejs('Node14_Latest') {
                     script {
                         sh "npm --version"
-                        sh "npm install"
                         echo "since: ${env.AFFECTED_BASE}"
                         def chdAll = calculateChanges()
                         def chdApps = calculateChanges(true)
