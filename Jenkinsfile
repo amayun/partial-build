@@ -52,9 +52,11 @@ pipeline {
             steps {
                 nodejs('Node14_Latest') {
                     script {
-                        def npmBin = sh(script: "npm bin", returnStdout: true)
+                        def baseRef = env.GIT_PREVIOUS_COMMIT
+                        sh "npm --version"
+                        sh "npm bin"
                         sh "npm install"
-                        sh "'${npmBin}'/lerna list"
+                        sh "\"\$(npm bin)\"/lerna list --all --parseable --since=${baseRef}"
                     }
                 }
             }
