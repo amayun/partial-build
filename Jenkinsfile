@@ -180,6 +180,8 @@ def isRootFilesWereChanged () {
         }
     }
 
+    echo "changedFiles: ${changedFiles}"
+
     return changedFiles.find { !it.contains(libsDir) && !it.contains(appsDir) }
 }
 
