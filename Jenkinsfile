@@ -198,7 +198,7 @@ def calculateChanges(appsOnly = false) {
     def packages = jsonSlurper.parseText(packagesJson)
 
     if(appsOnly) {
-        packages.findAll{ it['location'].contains(appsDir) }.collect{ it['name'] }
+        return packages.findAll{ it['location'].contains(appsDir) }.collect{ it['name'] }
     }
 
     return packages.collect{ it['name'] }
