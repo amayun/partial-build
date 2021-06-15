@@ -53,6 +53,10 @@ pipeline {
                 script {
                     def prevBuildResult = currentBuild.getPreviousBuild().result
 
+                    echo "changedFiles: ${changedFiles}"
+                    echo "getBuildCauses(): ${currentBuild.getBuildCauses()[0].hashCode()}"
+                    echo "getBuildVariables(): ${currentBuild.getBuildVariables()}"
+
                     if(prevBuildResult == 'SUCCESS') {
                         def changeLogSets = currentBuild.changeSets
                         def changedFiles = []
@@ -63,10 +67,6 @@ pipeline {
                                 }
                             }
                         }
-
-                        echo "changedFiles: ${changedFiles}"
-                        echo "getBuildCauses(): ${currentBuild.getBuildCauses()[0].hashCode()}"
-                        echo "getBuildVariables(): ${currentBuild.getBuildVariables()}"
 
                         def changedPackages = changedFiles
                             .findAll { it.startsWith('packages') }
