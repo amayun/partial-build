@@ -56,7 +56,7 @@ pipeline {
                         sh "npm --version"
                         sh "npm bin"
                         sh "npm install"
-                        sh "\"\$(npm bin)\"/lerna list --all --parseable --since=${baseRef}"
+                        sh "\"\$(npm bin)\"/lerna list --all --json --since=${baseRef}"
                     }
                 }
             }
