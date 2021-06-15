@@ -52,7 +52,7 @@ pipeline {
             steps {
                 script {
                     sh 'env'
-
+                    /* GIT_PREVIOUS_COMMIT - в случае пуша в мастер это базовый коммит*/
                     def prevBuildResult = currentBuild.getPreviousBuild().result
 
                     echo "getBuildCauses(): ${currentBuild.getBuildCauses()[0].hashCode()}"
