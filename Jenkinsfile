@@ -52,7 +52,8 @@ pipeline {
             steps {
                 nodejs('Node14_Latest') {
                     script {
-                        sh "bin path: ${npm bin}"
+                        sh "npm --version"
+                        sh "${npm bin}"
                         sh "npm install"
                         sh "${npm bin}/lerna list"
                     }
