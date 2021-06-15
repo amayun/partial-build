@@ -7,7 +7,7 @@ def DEPS = [first: ['second', 'third'], second: ['third']];
 pipeline {
     agent any
 
-    /*triggers {
+    /*triggers { // using parametrized build
         GenericTrigger(
             genericVariables: [
                 [ key: 'ref', value: '$.ref' ],
@@ -32,7 +32,7 @@ pipeline {
 
     stages {
         /*stage('Init') {
-            steps {
+            steps { // using parametrized build
                 script {
                     VALUESFILE = sh(returnStdout: true, script:'git diff $before $after --name-only')
                     LIST = VALUESFILE.split('\n')
@@ -47,6 +47,15 @@ pipeline {
                 }
             }
         }*/
+
+        stage('Init') {
+            steps {
+                script {
+                    sh 'yarn install'
+                    sh 'lerna list'
+                }
+            }
+        }
 
         stage('PostInit') {
             steps {
