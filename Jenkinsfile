@@ -65,6 +65,7 @@ pipeline {
                         }
 
                         echo "changedFiles: ${changedFiles}"
+                        echo "currentBuild: ${currentBuild}"
 
                         def changedPackages = changedFiles
                             .findAll { it.startsWith('packages') }
