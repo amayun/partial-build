@@ -51,7 +51,7 @@ pipeline {
         stage('Init') {
             steps {
                 script {
-                    sh 'yarn install'
+                    sh 'npm install'
                     sh 'lerna list'
                 }
             }
