@@ -169,8 +169,8 @@ pipeline {
 }
 
 def isRootFilesWereChanged () {
-    def appsDir = '/apps/'
-    def libsDir = '/libs/'
+    def appsDir = 'apps/'
+    def libsDir = 'libs/'
     def changedFiles = []
     for (entries in currentBuild.changeSets) {
         for (entry in entries) {
@@ -182,7 +182,7 @@ def isRootFilesWereChanged () {
 
     echo "changedFiles: ${changedFiles}"
 
-    return changedFiles.find { !it.contains(libsDir) && !it.contains(appsDir) }
+    return changedFiles.find { !it.startsWith(libsDir) && !it.startsWith(appsDir) }
 }
 
 def getAllPackages () {
