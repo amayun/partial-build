@@ -15,7 +15,7 @@ def isRootFilesWereChanged () {
         }
     }
 
-    return changedFiles.find { !it.contains(appsDir) && !it.contains(libsDir) }
+    return changedFiles.find { !it.contains(libsDir) && !it.contains(appsDir) }
 }
 
 def getAllPackages () {
