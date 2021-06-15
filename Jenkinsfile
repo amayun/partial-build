@@ -49,6 +49,8 @@ pipeline {
         stage('Init') {
             steps {
                 script {
+                    echo "esdfsdf: ${env.BRANCH_NAME}"
+
                     switch(env.BRANCH_NAME) {
                         case ~/PR.*/:
                             env.NAMESPACE = "test"
