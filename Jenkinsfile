@@ -53,7 +53,6 @@ pipeline {
                 script {
                     def prevBuildResult = currentBuild.getPreviousBuild().result
 
-                    echo "changedFiles: ${changedFiles}"
                     echo "getBuildCauses(): ${currentBuild.getBuildCauses()[0].hashCode()}"
                     echo "getBuildVariables(): ${currentBuild.getBuildVariables()}"
 
@@ -67,6 +66,8 @@ pipeline {
                                 }
                             }
                         }
+
+                        echo "changedFiles: ${changedFiles}"
 
                         def changedPackages = changedFiles
                             .findAll { it.startsWith('packages') }
