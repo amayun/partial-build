@@ -1,9 +1,36 @@
 #!/usr/bin/env groovy
 
-def calculateChanges(appsOnly = false) {
-    def changed = sh(script: "\"\$(npm bin)\"/lerna list --all --json --since=${env.AFFECTED_BASE}", returnStdout: true)
+import groovy.json.JsonSlurper;
 
-    return changed
+def appsDir = '/apps/';
+def libsDir = '/libs/';
+
+def isRootFilesWereChanged () {
+    def changedFiles = []
+    for (entries in currentBuild.changeSets) {
+        for (entry in entries) {
+            for (file in entry.affectedFiles) {
+                changedFiles += "${file.path}"
+            }
+        }
+    }
+
+    return changedFiles.find { !it.contains(appsDir) && !it.contains(libsDir) }
+}
+
+def calculateChanges(appsOnly = false) {
+    def all = sh(script: "\"\$(npm bin)\"/lerna list --all --json", returnStdout: true)
+    def affected = sh(script: "\"\$(npm bin)\"/lerna list --all --json --since=${env.AFFECTED_BASE}", returnStdout: true)
+    def packagesJson = isRootFilesWereChanged() ? all : affected
+
+    def jsonSlurper = new JsonSlurper()
+    def packages = jsonSlurper.parseText(packagesJson)
+
+    if(appsOnly) {
+        packages.findAll{ it.contains(appsDir) }.collect{ it['name'] }
+    }
+
+    return packages.collect{ it['name'] }
 }
 
 pipeline {
