@@ -1,8 +1,10 @@
 #!/usr/bin/env groovy
 
-def ALL = ['first', 'second', 'third', 'fourth']
-def APPS = [];
-def DEPS = [first: ['second', 'third'], second: ['third']];
+def calculateChanges(appsOnly = false) {
+    def changed = sh(script: "\"\$(npm bin)\"/lerna list --all --json --since=${env.AFFECTED_BASE}", returnStdout: true)
+
+    return changed
+}
 
 pipeline {
     agent any
@@ -50,13 +52,45 @@ pipeline {
 
         stage('Init') {
             steps {
+                switch(env.BRANCH_NAME) {
+                    case ~/PR.*/:
+                        env.VERSION = "${env.BRANCH_NAME}"
+                        env.NAMESPACE = "test"
+                        env.CLUSTER = "dev"
+                        env.AFFECTED_BASE = "origin/main"
+                        break
+                    case ~/main/:
+                        env.VERSION = "v0.0.0-dev-${GIT_COMMIT[0..7]}"
+                        env.NAMESPACE = "dev"
+                        env.CLUSTER = "dev"
+                        env.AFFECTED_BASE = env.GIT_PREVIOUS_COMMIT
+                        break
+                    case ~/^[\d\.]+/:
+                        env.VERSION = "${env.TAG_NAME}"
+                        env.NAMESPACE = "stage"
+                        env.CLUSTER = "stage"
+                        env.AFFECTED_BASE = ""
+                        break
+                    case ~/^[\d\.]+\-preprod/:
+                        env.VERSION = "${env.TAG_NAME}"
+                        env.NAMESPACE = "preprod"
+                        env.CLUSTER = "preprod"
+                        env.AFFECTED_BASE = ""
+                        break
+                    default:
+                        env.VERSION = "${BUILD_TIMESTAMP}"
+                        env.NAMESPACE = "test"
+                        env.CLUSTER = "dev"
+                        env.AFFECTED_BASE = ""
+                        break
+                }
+
                 nodejs('Node14_Latest') {
                     script {
-                        def baseRef = env.GIT_PREVIOUS_COMMIT
                         sh "npm --version"
-                        sh "npm bin"
                         sh "npm install"
-                        sh "\"\$(npm bin)\"/lerna list --all --json --since=${baseRef}"
+                        def chd = calculateChanges()
+                        echo "changed: ${chd}"
                     }
                 }
             }
