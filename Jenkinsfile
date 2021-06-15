@@ -65,9 +65,8 @@ pipeline {
                         }
 
                         echo "changedFiles: ${changedFiles}"
-                        echo "getBuildCauses(): ${currentBuild.getBuildCauses()}"
+                        echo "getBuildCauses(): ${currentBuild.getBuildCauses()[0].hashCode()}"
                         echo "getBuildVariables(): ${currentBuild.getBuildVariables()}"
-                        echo "getRawBuild(): ${currentBuild.getRawBuild()}"
 
                         def changedPackages = changedFiles
                             .findAll { it.startsWith('packages') }
