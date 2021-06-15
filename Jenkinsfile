@@ -2,8 +2,8 @@
 
 import groovy.json.JsonSlurper;
 
-def appsDir = '/apps/';
-def libsDir = '/libs/';
+def appsDir = '/apps/'
+def libsDir = '/libs/'
 
 def isRootFilesWereChanged () {
     def changedFiles = []
