@@ -54,7 +54,7 @@ pipeline {
                     script {
                         def npmBin = sh(script: "npm bin", returnStdout: true)
                         sh "npm install"
-                        sh "${npmBin}/lerna list"
+                        sh "'${npmBin}'/lerna list"
                     }
                 }
             }
