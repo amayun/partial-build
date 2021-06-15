@@ -49,13 +49,13 @@ pipeline {
         stage('Init') {
             steps {
                 script {
-                    echo "esdfsdf: ${env.BRANCH_NAME}"
+                    echo "esdfsdf: ${env.GIT_BRANCH}"
 
-                    switch(env.BRANCH_NAME) {
+                    switch(env.GIT_BRANCH) {
                         case ~/PR.*/:
                             env.NAMESPACE = "test"
                             env.CLUSTER = "dev"
-                            env.AFFECTED_BASE = "origin/main"
+                            env.AFFECTED_BASE = "origin/master"
                             break
                         case ~/master/:
                             env.NAMESPACE = "dev"
