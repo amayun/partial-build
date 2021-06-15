@@ -168,10 +168,9 @@ pipeline {
     }
 }
 
-def appsDir = '/apps/'
-def libsDir = '/libs/'
-
 def isRootFilesWereChanged () {
+    def appsDir = '/apps/'
+    def libsDir = '/libs/'
     def changedFiles = []
     for (entries in currentBuild.changeSets) {
         for (entry in entries) {
@@ -189,6 +188,7 @@ def getAllPackages () {
 }
 
 def calculateChanges(appsOnly = false) {
+    def appsDir = '/apps/'
     def affected = sh(script: "\"\$(npm bin)\"/lerna list --all --json --since=${env.AFFECTED_BASE}", returnStdout: true)
     def packagesJson = isRootFilesWereChanged() ? getAllPackages() : affected
 
