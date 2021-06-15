@@ -55,6 +55,7 @@ pipeline {
 
                     echo "getBuildCauses(): ${currentBuild.getBuildCauses()[0].hashCode()}"
                     echo "getBuildVariables(): ${currentBuild.getBuildVariables()}"
+                    echo "env: ${env}"
 
                     if(prevBuildResult == 'SUCCESS') {
                         def changeLogSets = currentBuild.changeSets
