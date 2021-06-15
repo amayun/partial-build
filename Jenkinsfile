@@ -18,10 +18,13 @@ def isRootFilesWereChanged () {
     return changedFiles.find { !it.contains(appsDir) && !it.contains(libsDir) }
 }
 
+def getAllPackages () {
+    return sh(script: "\"\$(npm bin)\"/lerna list --all --json", returnStdout: true)
+}
+
 def calculateChanges(appsOnly = false) {
-    def all = sh(script: "\"\$(npm bin)\"/lerna list --all --json", returnStdout: true)
     def affected = sh(script: "\"\$(npm bin)\"/lerna list --all --json --since=${env.AFFECTED_BASE}", returnStdout: true)
-    def packagesJson = isRootFilesWereChanged() ? all : affected
+    def packagesJson = isRootFilesWereChanged() ? getAllPackages() : affected
 
     def jsonSlurper = new JsonSlurper()
     def packages = jsonSlurper.parseText(packagesJson)
@@ -113,8 +116,10 @@ pipeline {
                     script {
                         sh "npm --version"
                         sh "npm install"
-                        def chd = calculateChanges()
-                        echo "changed: ${chd}"
+                        def chdAll = calculateChanges()
+                        def chdApps = calculateChanges(true)
+                        echo "changed all: ${chdAll}"
+                        echo "changed apps: ${chdApps}"
                     }
                 }
             }
